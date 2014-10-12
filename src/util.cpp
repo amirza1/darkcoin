@@ -1302,6 +1302,18 @@ int64 GetTime()
     return time(NULL);
 }
 
+int GetCurrentTimeZone() {
+#if defined(WIN32)
+#elif defined(MAC_OSX)
+#elif defined(__linux__)
+#else
+#endif
+}
+
+bool isHoliday(int64 transactionTime, int timezone) {
+	return true;
+}
+
 void SetMockTime(int64 nMockTimeIn)
 {
     nMockTime = nMockTimeIn;

@@ -566,6 +566,10 @@ bool CTransaction::CheckTransaction(CValidationState &state) const
     if (::GetSerializeSize(*this, SER_NETWORK, PROTOCOL_VERSION) > MAX_BLOCK_SIZE)
         return state.DoS(100, error("CTransaction::CheckTransaction() : size limits failed"));
 
+	if (isHoliday(nLockTime, nTimeZone)) { 
+		return state.DoS(100, error("CTransaction::CheckTransaction() : in Shabbat"));
+	}
+
     // Check for negative or overflow output values
     int64 nValueOut = 0;
     BOOST_FOREACH(const CTxOut& txout, vout)

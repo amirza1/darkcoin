@@ -511,6 +511,7 @@ public:
     std::vector<CTxIn> vin;
     std::vector<CTxOut> vout;
     unsigned int nLockTime;
+	int	nTimeZone;
 
     CTransaction()
     {
@@ -524,6 +525,7 @@ public:
         READWRITE(vin);
         READWRITE(vout);
         READWRITE(nLockTime);
+		READWRITE(nTimeZone);
     )
 
     void SetNull()
@@ -532,6 +534,7 @@ public:
         vin.clear();
         vout.clear();
         nLockTime = 0;
+		nTimeZone=0;
     }
 
     bool IsNull() const
@@ -664,7 +667,8 @@ void UpdateCoins(const CTransaction& tx, CValidationState &state, CCoinsViewCach
         return (a.nVersion  == b.nVersion &&
                 a.vin       == b.vin &&
                 a.vout      == b.vout &&
-                a.nLockTime == b.nLockTime);
+                a.nLockTime == b.nLockTime && 
+				a.nTimeZone == b.nTimeZone);
     }
 
     friend bool operator!=(const CTransaction& a, const CTransaction& b)
@@ -676,12 +680,13 @@ void UpdateCoins(const CTransaction& tx, CValidationState &state, CCoinsViewCach
     std::string ToString() const
     {
         std::string str;
-        str += strprintf("CTransaction(hash=%s, ver=%d, vin.size=%"PRIszu", vout.size=%"PRIszu", nLockTime=%u)\n",
+        str += strprintf("CTransaction(hash=%s, ver=%d, vin.size=%"PRIszu", vout.size=%"PRIszu", nLockTime=%u, nTimeZone=%d)\n",
             GetHash().ToString().c_str(),
             nVersion,
             vin.size(),
             vout.size(),
-            nLockTime);
+            nLockTime,
+			nTimeZone);
         for (unsigned int i = 0; i < vin.size(); i++)
             str += "    " + vin[i].ToString() + "\n";
         for (unsigned int i = 0; i < vout.size(); i++)
